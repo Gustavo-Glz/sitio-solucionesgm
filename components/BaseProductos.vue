@@ -24,7 +24,7 @@
               <v-list-item-group v-model="group">
                 <div class="text-h6 white--text px-2 py-4 grey darken-2">Categorías</div>
                 <v-list-item v-for="(categoria, index) in categorias" :key="index">
-                  <v-list-item-title class="text-subtitle-1 grey--text text--darken-2 px-2">{{ categoria }}</v-list-item-title>
+                  <v-list-item-title class="text-subtitle-1 grey--text text--darken-2 px-2" @click="getCategoria(categoria)">{{ categoria }}</v-list-item-title>
                 </v-list-item>
               </v-list-item-group>
             </v-list>
@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
   data() {
     return {
@@ -75,7 +75,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['getSiguiente']),
+    ...mapActions(['getSiguiente', 'getCategoria'])
   },
 
   computed: {

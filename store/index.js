@@ -24,15 +24,12 @@ export const mutations = {
   },
   setPagina(state, payload) {
     state.pagina = payload
-  }
+  },
 }
 
 export const actions = {
   async getDestacados({ commit }) {
-    const res = await db
-      .collection('productos')
-      .limit(4)
-      .get()
+    const res = await db.collection('productos').limit(4).get()
     const destacados = []
     res.forEach((doc) => {
       let producto = doc.data()
@@ -89,10 +86,26 @@ export const actions = {
     })
     return commit('setProductos', productos)
   },
+
+  async getCategoria({ commit, state }, categoria) {
+    const res = await db
+      .collection('productos')
+      .orderBy('id')
+      .limit(state.porPagina)
+      .where('categoria', '==', categoria)
+      .get()
+    const productosFiltrados = []
+    res.forEach((doc) => {
+      let producto = doc.data()
+      producto.id = doc.id
+      productosFiltrados.push(producto)
+    })
+    return commit('setProductos', productosFiltrados)
+  },
 }
 
 export const getters = {
   getPagina(state) {
     return state.pagina
-  }
+  },
 }
