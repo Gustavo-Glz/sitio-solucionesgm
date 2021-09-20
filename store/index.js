@@ -107,7 +107,6 @@ export const actions = {
 
   async getCategoria({ commit, state }, categoria) {
     state.categoria = categoria
-    console.log(state.categoria)
     db.collection('productos')
       .where('categoria', '==', categoria)
       .get()
