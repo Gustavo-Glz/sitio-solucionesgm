@@ -8,6 +8,7 @@ export const state = () => ({
   paginas: 0,
   pagina: 1,
   total: 0,
+  categoria: '',
 })
 
 export const mutations = {
@@ -72,22 +73,48 @@ export const actions = {
   },
 
   async getSiguiente({ commit, state }) {
-    const res = await db
-      .collection('productos')
-      .orderBy('id')
-      .limit(state.porPagina)
-      .startAfter(state.porPagina * (state.pagina - 1))
-      .get()
-    const productos = []
-    res.forEach((doc) => {
-      let producto = doc.data()
-      producto.id = doc.id
-      productos.push(producto)
-    })
-    return commit('setProductos', productos)
+    if (state.categoria == '') {
+      const res = await db
+        .collection('productos')
+        .orderBy('id')
+        .limit(state.porPagina)
+        .startAfter(state.porPagina * (state.pagina - 1))
+        .get()
+      const productos = []
+      res.forEach((doc) => {
+        let producto = doc.data()
+        producto.id = doc.id
+        productos.push(producto)
+      })
+      return commit('setProductos', productos)
+    }else {
+       const res = await db
+         .collection('productos')
+         .orderBy('id')
+         .where('categoria', '==', state.categoria)
+         .limit(state.porPagina)
+         .startAfter(state.porPagina * (state.pagina - 1))
+         .get()
+       const productos = []
+       res.forEach((doc) => {
+         let producto = doc.data()
+         producto.id = doc.id
+         productos.push(producto)
+       })
+       return commit('setProductos', productos)
+    }
   },
 
   async getCategoria({ commit, state }, categoria) {
+    state.categoria = categoria
+    console.log(state.categoria)
+    db.collection('productos')
+      .where('categoria', '==', categoria)
+      .get()
+      .then((res) => {
+        state.total = res.size
+        state.paginas = Math.ceil(state.total / state.porPagina)
+      })
     const res = await db
       .collection('productos')
       .orderBy('id')
