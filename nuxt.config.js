@@ -6,8 +6,8 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s Soluciones GM',
-    title: 'Lo mejor en tecnología a tu alcance',
+    titleTemplate: 'Lo mejor en tecnología a tu alcance',
+    title: '%s Soluciones GM ',
     htmlAttrs: {
       lang: 'es',
     },
