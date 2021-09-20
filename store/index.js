@@ -52,6 +52,7 @@ export const actions = {
   },
 
   async getProductos({ commit, state }) {
+    state.categoria = ''
     db.collection('productos')
       .get()
       .then((res) => {
