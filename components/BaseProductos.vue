@@ -1,21 +1,6 @@
 <template>
   <v-container class="mt-10" fluid>
     <v-row>
-      <!-- <v-col class="hidden-sm-and-down pa-0">
-        <v-card rounded="lg">
-          <v-list rounded>
-            <v-subheader class="text-h6 px-1">Categorías</v-subheader>
-            <v-list-item-group v-model="activo" color="primary">
-              <v-list-item
-                v-for="(categoria, index) in categorias"
-                :key="index"
-              >
-                <v-list-item-title>{{ categoria }}</v-list-item-title>
-              </v-list-item>
-            </v-list-item-group>
-          </v-list>
-        </v-card>
-      </v-col> -->
       <v-col cols="12">
         <div class="d-flex align-center">
           <v-btn icon @click.stop="drawer = !drawer"><v-icon large>mdi-format-list-bulleted</v-icon></v-btn>
