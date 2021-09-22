@@ -4,6 +4,7 @@ export const state = () => ({
   productosDestacados: [],
   productos: [],
   servicios: [],
+  detallesProducto: [],
   porPagina: 12,
   paginas: 0,
   pagina: 1,
@@ -25,6 +26,9 @@ export const mutations = {
   },
   setPagina(state, payload) {
     state.pagina = payload
+  },
+  setDetallesProducto(state, payload) {
+    state.detallesProducto = payload
   },
 }
 
@@ -61,7 +65,7 @@ export const actions = {
       })
     const res = await db
       .collection('productos')
-      .orderBy('id')
+      .orderBy('idProducto')
       .limit(state.porPagina)
       .get()
     const productos = []
@@ -77,7 +81,7 @@ export const actions = {
     if (state.categoria == '') {
       const res = await db
         .collection('productos')
-        .orderBy('id')
+        .orderBy('idProducto')
         .limit(state.porPagina)
         .startAfter(state.porPagina * (state.pagina - 1))
         .get()
@@ -88,21 +92,21 @@ export const actions = {
         productos.push(producto)
       })
       return commit('setProductos', productos)
-    }else {
-       const res = await db
-         .collection('productos')
-         .orderBy('id')
-         .where('categoria', '==', state.categoria)
-         .limit(state.porPagina)
-         .startAfter(state.porPagina * (state.pagina - 1))
-         .get()
-       const productos = []
-       res.forEach((doc) => {
-         let producto = doc.data()
-         producto.id = doc.id
-         productos.push(producto)
-       })
-       return commit('setProductos', productos)
+    } else {
+      const res = await db
+        .collection('productos')
+        .orderBy('idProducto')
+        .where('categoria', '==', state.categoria)
+        .limit(state.porPagina)
+        .startAfter(state.porPagina * (state.pagina - 1))
+        .get()
+      const productos = []
+      res.forEach((doc) => {
+        let producto = doc.data()
+        producto.id = doc.id
+        productos.push(producto)
+      })
+      return commit('setProductos', productos)
     }
   },
 
@@ -117,7 +121,7 @@ export const actions = {
       })
     const res = await db
       .collection('productos')
-      .orderBy('id')
+      .orderBy('idProducto')
       .limit(state.porPagina)
       .where('categoria', '==', categoria)
       .get()
@@ -128,6 +132,20 @@ export const actions = {
       productosFiltrados.push(producto)
     })
     return commit('setProductos', productosFiltrados)
+  },
+
+  async getDetallesProducto({ commit }, id) {
+    const res = await db
+      .collection('productos')
+      .where('idProducto', '==', id)
+      .get()
+      const detalles = []
+      res.forEach((doc) => {
+        let detalle = doc.data()
+        detalle.id = doc.id
+        detalles.push(detalle)
+      })
+      return commit('setDetallesProducto', detalles)
   },
 }
 
